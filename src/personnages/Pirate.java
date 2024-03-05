@@ -9,8 +9,10 @@ public class Pirate {
 	private Arme arme;
 	private Case casePlateau;
 	
-	public Pirate(String nom) {
+	public Pirate(String nom, Couleur couleur, Case casePlateau) {
 		this.nom=nom;
+		this.couleur=couleur;
+		this.casePlateau=casePlateau;
 	}
 	
 	public int getPv() {
