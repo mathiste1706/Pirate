@@ -1,18 +1,16 @@
 package personnages;
 
-import jeu.Case;
 
 public class Pirate {
 	private int pv=5;
 	private String nom;
 	private Couleur couleur;
 	private Arme arme;
-	private Case casePlateau;
+	private int position=1;
 	
-	public Pirate(String nom, Couleur couleur, Case casePlateau) {
+	public Pirate(String nom, Couleur couleur) {
 		this.nom=nom;
 		this.couleur=couleur;
-		this.casePlateau=casePlateau;
 	}
 	
 	public int getPv() {
@@ -30,12 +28,12 @@ public class Pirate {
 		return arme;
 	}
 	
-	public Case getCasePlateau() {
-		return casePlateau;
+	public int getPosition() {
+		return position;
 	}
 	
-	public void setCasePlateau(Case casePlateau) {
-		this.casePlateau=casePlateau;
+	public void setPosition(int position) {
+		this.position=position;
 	}
 	
 }
