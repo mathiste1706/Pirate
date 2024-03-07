@@ -9,7 +9,7 @@ public class Plateau {
 	protected Plateau() {
 		listeCases=new Case[nbCases];
 		for (int i=0;i<listeCases.length;i++) {
-			listeCases[i]=new Case(Effet.SANS);
+			listeCases[i]=new Case(Effet.NEUTRE);
 		}
 	}
 	protected Plateau(int nbCases, Case[] listeCases) {

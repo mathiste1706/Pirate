@@ -42,7 +42,7 @@ public class Jeu {
 		}
 		
 		while (!allDead && !win) {
-			for (int i=0; i<listePirates.length && win && allDead;i++) {
+			for (int i=0; i<listePirates.length && !win && !allDead;i++) {
 				// Tour d'un pirate
 				if (listePirates[i].getPv()>0) {
 					de=lanceDe();
@@ -62,6 +62,7 @@ public class Jeu {
 				allDead=true;
 			}
 		}
+		System.out.println(win);
 	}
 	
 	public int lanceDe() {
