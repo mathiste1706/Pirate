@@ -32,15 +32,42 @@ public class Jeu {
 	}
 	
 	public void start() {
+		boolean allDead=false;
+		boolean win=false;
+		int de=0;
 		
-		
+		// Remplissage de listePirate
 		for (int i=0; i<nbJoueurs;i++) {
 			listePirates[i]=new Pirate(Nom.values()[i].toString(), Couleur.values()[i]);
+		}
+		
+		while (!allDead && !win) {
+			for (int i=0; i<listePirates.length && win && allDead;i++) {
+				// Tour d'un pirate
+				if (listePirates[i].getPv()>0) {
+					de=lanceDe();
+					deplacerPirate(listePirates[i], de);
+					
+					if (plateau.getListeCases()[listePirates[i].getPosition()].getEffet()==Effet.VICTOIRE) {
+						win=true;
+					}
+				}
+				
+			}
+			int enVie=0;
+			for (int i=0; i<listePirates.length;i++) {
+				enVie++;
+			}
+			if (enVie==1) {
+				allDead=true;
+			}
 		}
 	}
 	
 	public int lanceDe() {
-		return random.nextInt(6)+1;
+		int de=random.nextInt(6)+1;
+		de+=random.nextInt(6)+1;
+		return de;
 	}
 	
 	public void deplacerPirate(Pirate pirate, int valeurDe) {
