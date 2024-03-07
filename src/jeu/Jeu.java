@@ -52,12 +52,15 @@ public class Jeu {
 				// Tour d'un pirate
 				if (listePirates[i].getPv()>0) {
 					Affichage.aQuiTour(listePirates[i].getIdentite().getNom());
+					
 					de=lanceDe();
 					Affichage.lancerDe(listePirates[i].getIdentite().getNom(), de);
+					
 					Affichage.deplacement(listePirates[i], de, plateau.getNbCases());
 					deplacerPirate(listePirates[i], de);
 					Affichage.descCase(plateau.getListeCases()[listePirates[i].getPosition()-1], listePirates[i]);
 					
+					appliquerEffet(listePirates[i], plateau);
 					enVie++;
 					
 					
@@ -67,6 +70,7 @@ public class Jeu {
 					
 					nomPirate=listePirates[i].getIdentite().getNom();
 				}
+				
 				
 			}
 				
@@ -86,11 +90,44 @@ public class Jeu {
 	}
 	
 	public void deplacerPirate(Pirate pirate, int valeurDe) {
-		int nvNum=pirate.getPosition()+valeurDe;
-		if (nvNum>plateau.getNbCases()) {
-			nvNum=plateau.getNbCases()-(nvNum-plateau.getNbCases());
+		int nvNum;
+		if (valeurDe<0) {
+			nvNum=pirate.getPosition()-Math.abs(valeurDe);
+			// Recule plus loin que la case Depart
+			 if (nvNum<1) {
+				nvNum=1;
+			}
 		}
+		else {
+			nvNum= pirate.getPosition()+valeurDe;
+			// Depasse la case arrivee
+			if (nvNum>plateau.getNbCases()) {
+				nvNum=plateau.getNbCases()-(nvNum-plateau.getNbCases());
+			}
+		}
+		
+		
+
 		pirate.setPosition(nvNum);
+	}
+	
+	public void appliquerEffet(Pirate pirate, Plateau plateau) {
+		int de;
+		Case caseActuelle=plateau.getListeCases()[pirate.getPosition()-1];
+		if (caseActuelle.getEffet()==Effet.RHUM) {
+			de=lanceDe();
+			Affichage.lancerDe(pirate.getIdentite().getNom(), de);
+			
+			de*=-1;
+			Affichage.deplacement(pirate, de, plateau.getNbCases());
+			deplacerPirate(pirate, de);
+			caseActuelle=plateau.getListeCases()[pirate.getPosition()-1];
+			Affichage.descCase(caseActuelle, pirate);
+		}
+		else if (pirate.getArme()!=null &&caseActuelle.getEffet()==Effet.ARME && (caseActuelle.getArme().getForce()>pirate.getArme().getForce())){
+				pirate.setArme(caseActuelle.getArme());
+			
+		}
 	}
 	
 }

@@ -15,7 +15,8 @@ public class Case {
 	}
 	
 	public Case(Effet effet, Arme arme) {
-		numero++;
+		compteur++;
+		numero=compteur;
 		this.effet=effet;
 		this.arme=arme;
 	}

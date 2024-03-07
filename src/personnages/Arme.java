@@ -2,19 +2,20 @@ package personnages;
 
 public class Arme {
 
-	private int force;
 	private String nom;
+	private int force;
 	
-	public Arme(int force, String nom) {
-		this.force = force;
+	public Arme(String nom, int force) {
 		this.nom = nom;
+		this.force = force;
 	}
-	public int getForce() {
-		return force;
-	}
+	
 	public String getNom() {
 		return nom;
 	}
 	
+	public int getForce() {
+		return force;
+	}
 	
 }

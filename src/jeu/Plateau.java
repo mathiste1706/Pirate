@@ -1,5 +1,6 @@
 package jeu;
 
+import personnages.Arme;
 
 public class Plateau {
 
@@ -9,7 +10,23 @@ public class Plateau {
 	protected Plateau() {
 		listeCases=new Case[nbCases];
 		for (int i=0;i<listeCases.length-1;i++) {
-			listeCases[i]=new Case(Effet.NEUTRE);
+			if (i==9 || i==5 ||i==20 ||i==25) {
+				listeCases[i]=new Case(Effet.RHUM);
+			}
+			else if (i==5 || i==23) {
+				listeCases[i]=new Case(Effet.ARME, new Arme("pistolet", 2));
+			}
+			
+			else if (i==11 || i==26) {
+				listeCases[i]=new Case(Effet.ARME, new Arme("sabre", 1));
+			}
+			
+			else if (i==16) {
+				listeCases[i]=new Case(Effet.ARME, new Arme("mousquet", 3));
+			}
+			else {
+				listeCases[i]=new Case(Effet.NEUTRE);
+			}
 		}
 		listeCases[nbCases-1]=new Case(Effet.VICTOIRE);
 	}

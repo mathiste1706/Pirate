@@ -43,8 +43,7 @@ public class Affichage {
 		
 		texte.append(pirate.getIdentite().getNom());
 		if (de<0) {
-			texte.append(" recule"
-					);
+			texte.append(" recule");
 		}
 		else if (nvNum>nbCases) {
 			texte.append(" avance de "+(de-(nvNum-nbCases)));
@@ -85,17 +84,17 @@ public class Affichage {
 	private static void appliquerEffet(Case caseActuelle, Pirate pirate) {
 		StringBuilder texte=new StringBuilder();
 		if (caseActuelle.getEffet()==Effet.RHUM) {
-			texte.append(" et trouve du rhum!"+pirate.getIdentite().getNom()+" boit.\n");
+			texte.append(" et trouve du rhum! "+pirate.getIdentite().getNom()+" boit.\n");
 		}
 		
 		else if (caseActuelle.getEffet()==Effet.ARME) {
 			texte.append(" et trouve une arme! C'est un "+caseActuelle.getArme().getNom()+ 
 					" de force "+caseActuelle.getArme().getForce());
-			if (caseActuelle.getArme().getForce()>pirate.getArme().getForce()){
-				texte.append(pirate.getIdentite().getNom()+" l'a prend.\n");
+			if (pirate.getArme() ==null || caseActuelle.getArme().getForce()>pirate.getArme().getForce()){
+				texte.append(". "+pirate.getIdentite().getNom()+" l'a prend.\n");
 			}
 			else {
-				texte.append(pirate.getIdentite().getNom()+ " en a deja une meilleur.\n");
+				texte.append(pirate.getIdentite().getNom()+ " en a deja une meilleure.\n");
 			}
 		}
 		else {

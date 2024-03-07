@@ -32,6 +32,10 @@ public class Pirate {
 		return position;
 	}
 	
+	public void setArme(Arme arme) {
+		this.arme=arme;
+	}
+	
 	public void setPosition(int position) {
 		this.position=position;
 	}
