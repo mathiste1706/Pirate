@@ -8,9 +8,10 @@ public class Plateau {
 	
 	protected Plateau() {
 		listeCases=new Case[nbCases];
-		for (int i=0;i<listeCases.length;i++) {
+		for (int i=0;i<listeCases.length-1;i++) {
 			listeCases[i]=new Case(Effet.NEUTRE);
 		}
+		listeCases[nbCases-1]=new Case(Effet.VICTOIRE);
 	}
 	protected Plateau(int nbCases, Case[] listeCases) {
 		this.nbCases=nbCases;

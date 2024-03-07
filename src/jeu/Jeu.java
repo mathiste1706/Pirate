@@ -35,6 +35,7 @@ public class Jeu {
 		boolean allDead=false;
 		boolean win=false;
 		int de=0;
+		int enVie=0;
 		
 		// Remplissage de listePirate
 		for (int i=0; i<nbJoueurs;i++) {
@@ -42,22 +43,22 @@ public class Jeu {
 		}
 		
 		while (!allDead && !win) {
+			enVie=0;
 			for (int i=0; i<listePirates.length && !win && !allDead;i++) {
 				// Tour d'un pirate
 				if (listePirates[i].getPv()>0) {
 					de=lanceDe();
 					deplacerPirate(listePirates[i], de);
+					enVie++;
 					
-					if (plateau.getListeCases()[listePirates[i].getPosition()].getEffet()==Effet.VICTOIRE) {
+					
+					if (plateau.getListeCases()[listePirates[i].getPosition()-1].getEffet()==Effet.VICTOIRE) {
 						win=true;
 					}
 				}
 				
 			}
-			int enVie=0;
-			for (int i=0; i<listePirates.length;i++) {
-				enVie++;
-			}
+				
 			if (enVie==1) {
 				allDead=true;
 			}
