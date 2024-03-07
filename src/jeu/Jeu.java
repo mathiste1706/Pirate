@@ -3,8 +3,9 @@ package jeu;
 import java.util.Random;
 
 import personnages.Couleur;
-import personnages.Nom;
+import personnages.Identite;
 import personnages.Pirate;
+import affichage.Affichage;
 
 public class Jeu {
 	private int nbJoueurs=2;
@@ -33,37 +34,49 @@ public class Jeu {
 	
 	public void start() {
 		boolean allDead=false;
-		boolean win=false;
+		boolean arrivee=false;
 		int de=0;
 		int enVie=0;
+		String nomPirate="default";
 		
 		// Remplissage de listePirate
 		for (int i=0; i<nbJoueurs;i++) {
-			listePirates[i]=new Pirate(Nom.values()[i].toString(), Couleur.values()[i]);
+			listePirates[i]=new Pirate(Identite.values()[i], Couleur.values()[i]);
 		}
 		
-		while (!allDead && !win) {
+		Affichage.contexte(listePirates);
+		
+		while (!allDead && !arrivee) {
 			enVie=0;
-			for (int i=0; i<listePirates.length && !win && !allDead;i++) {
+			for (int i=0; i<listePirates.length && !arrivee && !allDead;i++) {
 				// Tour d'un pirate
 				if (listePirates[i].getPv()>0) {
+					Affichage.aQuiTour(listePirates[i].getIdentite().getNom());
 					de=lanceDe();
+					Affichage.lancerDe(listePirates[i].getIdentite().getNom(), de);
+					Affichage.deplacement(listePirates[i], de, plateau.getNbCases());
 					deplacerPirate(listePirates[i], de);
+					Affichage.descCase(plateau.getListeCases()[listePirates[i].getPosition()-1], listePirates[i]);
+					
 					enVie++;
 					
 					
 					if (plateau.getListeCases()[listePirates[i].getPosition()-1].getEffet()==Effet.VICTOIRE) {
-						win=true;
+						arrivee=true;
 					}
+					
+					nomPirate=listePirates[i].getIdentite().getNom();
 				}
 				
 			}
 				
 			if (enVie==1) {
 				allDead=true;
+				
 			}
 		}
-		System.out.println(win);
+		Affichage.gagnant(nomPirate);
+		
 	}
 	
 	public int lanceDe() {

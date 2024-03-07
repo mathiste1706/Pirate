@@ -3,12 +3,14 @@ package jeu;
 import personnages.Arme;
 
 public class Case {
-	private int numero=0;
+	private static int compteur=0;
+	private int numero;
 	private Effet effet;
 	private Arme arme;
 
 	public Case(Effet effet) {
-		numero++;
+		compteur++;
+		numero=compteur;
 		this.effet=effet;
 	}
 	
