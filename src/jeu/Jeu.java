@@ -193,20 +193,20 @@ public class Jeu {
 			if (degatInitiateur>degatReac) {
 			
 				infligerDegat(degatInitiateur-degatReac, reac);
-				Affichage.finDuel(initiateur.getIdentite().getNom(), reac.getIdentite().getNom(), calculerDegat(degatInitiateur-degatReac));
+				Affichage.finDuel(initiateur.getIdentite().getNom(), reac, calculerDegat(degatInitiateur-degatReac));
 			}
 			// Pirate initiateur perd
 			else if (degatReac>degatInitiateur) {
 				
 				infligerDegat(degatReac-degatInitiateur, initiateur);
-				Affichage.finDuel(reac.getIdentite().getNom(), initiateur.getIdentite().getNom(), calculerDegat(degatReac-degatInitiateur));
+				Affichage.finDuel(reac.getIdentite().getNom(), initiateur, calculerDegat(degatReac-degatInitiateur));
 				
 			}
 			// Egalite
 			else {
 				infligerDegat(0, initiateur);
 				infligerDegat(0, reac);
-				Affichage.finDuelEgalite(initiateur.getIdentite().getNom(), reac.getIdentite().getNom());
+				Affichage.finDuelEgalite(initiateur, reac);
 				}
 			}
 		
