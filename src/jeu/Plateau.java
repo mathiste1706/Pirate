@@ -13,16 +13,17 @@ public class Plateau {
 			if (i==9 || i==5 ||i==20 ||i==25) {
 				listeCases[i]=new Case(Effet.RHUM);
 			}
-			else if (i==5 || i==23) {
-				listeCases[i]=new Case(Effet.ARME, new Arme("pistolet", 2));
-			}
 			
 			else if (i==11 || i==26) {
-				listeCases[i]=new Case(Effet.ARME, new Arme("sabre", 1));
+				listeCases[i]=new Case(Effet.ARME, new Arme("sabre", 2));
+			}
+			
+			else if (i==5 || i==23) {
+				listeCases[i]=new Case(Effet.ARME, new Arme("pistolet", 4));
 			}
 			
 			else if (i==16) {
-				listeCases[i]=new Case(Effet.ARME, new Arme("mousquet", 3));
+				listeCases[i]=new Case(Effet.ARME, new Arme("mousquet", 6));
 			}
 			else {
 				listeCases[i]=new Case(Effet.NEUTRE);

@@ -33,11 +33,8 @@ public class Jeu {
 	}
 	
 	public void start() {
-		boolean allDead=false;
+		boolean plusDeUnEnVie=true;
 		boolean arrivee=false;
-		int de=0;
-		int enVie=0;
-		String nomPirate="default";
 		
 		// Remplissage de listePirate
 		for (int i=0; i<nbJoueurs;i++) {
@@ -46,50 +43,35 @@ public class Jeu {
 		
 		Affichage.contexte(listePirates);
 		
-		while (!allDead && !arrivee) {
-			enVie=0;
-			for (int i=0; i<listePirates.length && !arrivee && !allDead;i++) {
+		while (plusDeUnEnVie && !arrivee) {
+			
+			for (int i=0; i<listePirates.length && (!arrivee && plusDeUnEnVie);i++) {
 				// Tour d'un pirate
-				if (listePirates[i].getPv()>0) {
-					Affichage.aQuiTour(listePirates[i].getIdentite().getNom());
-					
-					de=lanceDe();
-					Affichage.lancerDe(listePirates[i].getIdentite().getNom(), de);
-					
-					Affichage.deplacement(listePirates[i], de, plateau.getNbCases());
-					deplacerPirate(listePirates[i], de);
-					Affichage.descCase(plateau.getListeCases()[listePirates[i].getPosition()-1], listePirates[i]);
-					
-					appliquerEffet(listePirates[i], plateau);
-					enVie++;
-					
+					tour1Pirate(listePirates[i]);;
 					
 					if (plateau.getListeCases()[listePirates[i].getPosition()-1].getEffet()==Effet.VICTOIRE) {
 						arrivee=true;
+						Affichage.gagnantBarque(listePirates[i].getIdentite().getNom());
 					}
-					
-					nomPirate=listePirates[i].getIdentite().getNom();
+					else {
+						// Duel (les pirates se trouvent a une distance de 3 cases)
+						plusDeUnEnVie=duel(listePirates[i]);
+					}
+				}
+			if (!plusDeUnEnVie) {
+				gagnantDuel();
 				}
 				
-				
 			}
-				
-			if (enVie==1) {
-				allDead=true;
-				
-			}
-		}
-		Affichage.gagnant(nomPirate);
-		
 	}
 	
-	public int lanceDe() {
+	private int lanceDe() {
 		int de=random.nextInt(6)+1;
 		de+=random.nextInt(6)+1;
 		return de;
 	}
 	
-	public void deplacerPirate(Pirate pirate, int valeurDe) {
+	private void deplacerPirate(Pirate pirate, int valeurDe) {
 		int nvNum;
 		if (valeurDe<0) {
 			nvNum=pirate.getPosition()-Math.abs(valeurDe);
@@ -111,14 +93,14 @@ public class Jeu {
 		pirate.setPosition(nvNum);
 	}
 	
-	public void appliquerEffet(Pirate pirate, Plateau plateau) {
+	private void appliquerEffet(Pirate pirate, Plateau plateau) {
 		int de;
 		Case caseActuelle=plateau.getListeCases()[pirate.getPosition()-1];
 		if (caseActuelle.getEffet()==Effet.RHUM) {
 			de=lanceDe();
 			Affichage.lancerDe(pirate.getIdentite().getNom(), de);
 			
-			de*=-1;
+			de*=-1;		//Modification du signe pour reculer
 			Affichage.deplacement(pirate, de, plateau.getNbCases());
 			deplacerPirate(pirate, de);
 			caseActuelle=plateau.getListeCases()[pirate.getPosition()-1];
@@ -130,4 +112,120 @@ public class Jeu {
 		}
 	}
 	
+	private void tour1Pirate(Pirate pirate) {
+		
+		int de;
+	
+		if (pirate.getPv()>0) {
+			Affichage.aQuiTour(pirate);
+			
+			de=lanceDe();
+			Affichage.lancerDe(pirate.getIdentite().getNom(), de);
+			
+			Affichage.deplacement(pirate, de, plateau.getNbCases());
+			deplacerPirate(pirate,de);
+			Affichage.descCase(plateau.getListeCases()[pirate.getPosition()-1], pirate);
+			
+			
+			appliquerEffet(pirate, plateau);
+		}
+	}
+	
+	private int calculerDegat(int difference) {
+		int degat;
+		if (difference>=10) {
+			degat=3;
+		}
+		else if (difference>=5) {
+			degat=2;
+		}
+		else {
+			degat=1;
+		}
+		return degat;
+	}
+	
+	private void infligerDegat(int difference, Pirate pirate) {
+		int nvPv;
+		
+		
+		nvPv=pirate.getPv()-calculerDegat(difference);
+		if (nvPv<0) {
+			nvPv=0;
+		}
+		pirate.setPv(nvPv);
+	}
+	
+	
+	
+	// Duel (les pirates se trouvent a une distance de 3 cases)
+	private boolean duel(Pirate initiateur) {
+		boolean plusDeUnEnVie = false;
+		int deDuelInitiateur;
+		int deDuelReac;
+		int degatInitiateur;
+		int degatReac;
+		
+		int indexReac = 0;
+		Pirate reac=null;
+		Pirate[] listeReac=new Pirate[nbJoueurs];
+		
+		for (int j=0; j<listePirates.length;j++) {
+			if (!initiateur.equals(listePirates[j]) && listePirates[j].getPv()>0 && Math.abs(initiateur.getPosition()-listePirates[j].getPosition())<4) {
+			
+				listeReac[indexReac]=listePirates[j];
+				
+				indexReac++;
+			}
+		}
+		reac=listeReac[random.nextInt(listeReac.length)];
+		
+		if (reac!=null) {
+			deDuelInitiateur=lanceDe();
+			deDuelReac=lanceDe();
+			
+			degatInitiateur=deDuelInitiateur+initiateur.getArme().getForce();
+			degatReac=deDuelReac+reac.getArme().getForce();
+			
+			Affichage.debutDuel(initiateur, reac, deDuelInitiateur, deDuelReac);
+			
+			//Pirate reac perd
+			if (degatInitiateur>degatReac) {
+			
+				infligerDegat(degatInitiateur-degatReac, reac);
+				Affichage.finDuel(initiateur.getIdentite().getNom(), reac.getIdentite().getNom(), calculerDegat(degatInitiateur-degatReac));
+			}
+			// Pirate initiateur perd
+			else if (degatReac>degatInitiateur) {
+				
+				infligerDegat(degatReac-degatInitiateur, initiateur);
+				Affichage.finDuel(reac.getIdentite().getNom(), initiateur.getIdentite().getNom(), calculerDegat(degatReac-degatInitiateur));
+				
+			}
+			// Egalite
+			else {
+				infligerDegat(0, initiateur);
+				infligerDegat(0, reac);
+				Affichage.finDuelEgalite(initiateur.getIdentite().getNom(), reac.getIdentite().getNom());
+				}
+			}
+		
+				
+		// Teste si plus de un pirate est en vie
+		for (int j=0; j<listePirates.length;j++)
+			if (initiateur.equals(listePirates[j]) && listePirates[j].getPv()>0) {
+				plusDeUnEnVie=true;
+			}
+		return plusDeUnEnVie;
+	}
+	
+	private void gagnantDuel() {
+		boolean trouve=false;
+		for (int i=0;i<listePirates.length && !trouve;i++) {
+			if (listePirates[i].getPv()>0) {
+				Affichage.gagnantAllDead(listePirates[i].getIdentite());
+				trouve=true;
+			}
+		}
+	}
 }

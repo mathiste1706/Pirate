@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import jeu.Case;
 import jeu.Effet;
+import personnages.Identite;
 import personnages.Pirate;
 
 public class Affichage {
@@ -26,8 +27,9 @@ public class Affichage {
 		System.out.println(texte.toString());
 	}
 	
-	public static void aQuiTour(String nomPirate) {
-		System.out.println("C'est au tour de "+nomPirate+".");
+	public static void aQuiTour(Pirate pirate) {
+		System.out.println("C'est au tour de "+pirate.getIdentite().getNom()+". "+pirate.getIdentite().getPronom()+" a "
+	+pirate.getPv()+" PV.");
 		System.out.println("(Pour lancer les dees appuyer sur Entree)");
 		reader.nextLine();
 	}
@@ -89,9 +91,9 @@ public class Affichage {
 		
 		else if (caseActuelle.getEffet()==Effet.ARME) {
 			texte.append(" et trouve une arme! C'est un "+caseActuelle.getArme().getNom()+ 
-					" de force "+caseActuelle.getArme().getForce());
+					" de force "+caseActuelle.getArme().getForce()+".\n");
 			if (pirate.getArme() ==null || caseActuelle.getArme().getForce()>pirate.getArme().getForce()){
-				texte.append(". "+pirate.getIdentite().getNom()+" l'a prend.\n");
+				texte.append(pirate.getIdentite().getNom()+" l'a prend.\n");
 			}
 			else {
 				texte.append(pirate.getIdentite().getNom()+ " en a deja une meilleure.\n");
@@ -103,8 +105,52 @@ public class Affichage {
 		System.out.print(texte);
 	}
 	
-	public static void gagnant(String nomPirate) {
-		System.out.println(nomPirate+" a gagne! "+nomPirate+" est le nouveau capitaine!");
+	public static void debutDuel(Pirate pirateI, Pirate pirateJ, int deI, int deJ) {
+		System.out.println(pirateI.getIdentite().getNom()+" et "+pirateJ.getIdentite().getNom()+" se battent en duel!");
+		System.out.println("(Pour lancer les dees appuyer sur Entree)");
+		reader.nextLine();
+		
+		lancerDe(pirateI.getIdentite().getNom(), deI);
+		System.out.println(pirateI.getIdentite().getPronom()+ " donne un coup de force "+(deI+pirateI.getArme().getForce()));
+		lancerDe(pirateJ.getIdentite().getNom(), deJ);
+		System.out.println(pirateJ.getIdentite().getPronom()+ " donne un coup de force "+(deJ+pirateJ.getArme().getForce()));
+		
+		
+	}
+	
+	public static void finDuel(String gagnant, String perdant, int degat) {
+		System.out.print(gagnant+" gagne le duel et inflige "+degat);
+		if (degat==1) {
+			System.out.print(" point ");
+		}
+		else {
+			System.out.print(" points ");
+		}
+		System.out.println("de degat a "+perdant);
+		System.out.println("(Pour continuer taper sur Entree)");
+		reader.nextLine();
+	}
+	
+	public static void finDuelEgalite(String nomPirateI, String nomPirateJ) {
+		System.out.println("Egalite! "+nomPirateI+" inflige 1 point de degat a "+nomPirateJ+" et "+nomPirateJ+" lui en inflige aussi 1.");
+		
+		System.out.println("(Pour continuer taper sur Entree)");
+		reader.nextLine();
+	}
+	
+	public static void gagnantBarque(String nomPirate) {
+		System.out.println(nomPirate+" touve la barge! "+nomPirate+" est le nouveau capitaine!");
+	}
+	
+	public static void gagnantAllDead(Identite identite) {
+		System.out.print(identite.getNom()+" est le ");
+		if (identite.getPronom().equals("Elle")) {
+			System.out.print("derniere");
+		}
+		else {
+			System.out.print("dernier");
+		}
+		System.out.println(" debout! "+identite.getNom()+" est le nouveau capitaine!");
 	}
 	
 

@@ -5,7 +5,7 @@ public class Pirate {
 	private int pv=5;
 	private Identite identite;
 	private Couleur couleur;
-	private Arme arme;
+	private Arme arme=new Arme("Poigns",1);
 	private int position=1;
 	
 	public Pirate(Identite identite, Couleur couleur) {
@@ -30,6 +30,10 @@ public class Pirate {
 	
 	public int getPosition() {
 		return position;
+	}
+	
+	public void setPv(int pv) {
+		this.pv=pv;
 	}
 	
 	public void setArme(Arme arme) {
