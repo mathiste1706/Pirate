@@ -165,6 +165,7 @@ public class Jeu {
 		int deDuelReac;
 		int degatInitiateur;
 		int degatReac;
+		int enVie=0;
 		
 		int indexReac = 0;
 		Pirate reac=null;
@@ -212,10 +213,13 @@ public class Jeu {
 		
 				
 		// Teste si plus de un pirate est en vie
-		for (int j=0; j<listePirates.length;j++)
-			if (initiateur.equals(listePirates[j]) && listePirates[j].getPv()>0) {
-				plusDeUnEnVie=true;
+		for (int j=0; j<listePirates.length && enVie<3;j++)
+			if (listePirates[j].getPv()>0) {
+				enVie++;
 			}
+		if (enVie>1) {
+			plusDeUnEnVie=true;
+		}
 		return plusDeUnEnVie;
 	}
 	
@@ -223,9 +227,12 @@ public class Jeu {
 		boolean trouve=false;
 		for (int i=0;i<listePirates.length && !trouve;i++) {
 			if (listePirates[i].getPv()>0) {
-				Affichage.gagnantAllDead(listePirates[i].getIdentite());
+				Affichage.gagnantParDuel(listePirates[i].getIdentite());
 				trouve=true;
 			}
+		}
+		if (!trouve) {
+			Affichage.tousMort();
 		}
 	}
 }

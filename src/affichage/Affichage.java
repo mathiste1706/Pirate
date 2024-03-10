@@ -151,7 +151,7 @@ public class Affichage {
 		System.out.println(nomPirate + " touve la barge! " + nomPirate + " est le nouveau capitaine!");
 	}
 
-	public static void gagnantAllDead(Identite identite) {
+	public static void gagnantParDuel(Identite identite) {
 		System.out.print(identite.getNom() + " est ");
 		if (identite.getPronom().equals("Elle")) {
 			System.out.print("la derniere");
@@ -159,6 +159,10 @@ public class Affichage {
 			System.out.print("le dernier");
 		}
 		System.out.println(" debout! " + identite.getNom() + " est le nouveau capitaine!");
+	}
+	
+	public static void tousMort() {
+		System.out.println("Tout les pirates sont morts, le capitaine ne sera pas l'un d'entre eux!");
 	}
 	
 	private static void aPeri(Pirate pirate) {
