@@ -1,22 +1,18 @@
 package affichage;
 
-import java.util.Scanner;
-
 import jeu.Case;
-import jeu.Effet;
+import jeu.CaseArme;
+import jeu.CaseRhum;
 import personnages.Identite;
 import personnages.Pirate;
 
-public class Affichage {
+import java.util.Scanner;
 
-	// Constructeur prive pr q'un constructeur ne soit pas creer automatiquement,
-	// alors que la classe est static
-	private Affichage() {
-	}
-
+public class JournalDeBord implements IAffichage {
 	private static Scanner reader = new Scanner(System.in);
 
-	public static void contexte(Pirate[] listePirates) {
+
+	public void contexte(Pirate[] listePirates) {
 		StringBuilder texte = new StringBuilder();
 		for (int i = 0; i < listePirates.length - 2; i++) {
 			texte.append(listePirates[i].getIdentite().getNom() + ", ");
@@ -30,18 +26,18 @@ public class Affichage {
 		System.out.println(texte.toString());
 	}
 
-	public static void aQuiTour(Pirate pirate) {
+	public void aQuiTour(Pirate pirate) {
 		System.out.println("C'est au tour de " + pirate.getIdentite().getNom() + ". " + pirate.getIdentite().getPronom()
 				+ " a " + pirate.getPv() + " PV.");
 		System.out.println("(Pour lancer les dees appuyer sur Entree)");
 		reader.nextLine();
 	}
 
-	public static void lancerDe(String nomPirate, int de) {
-		System.out.println(nomPirate + " lance les des et fait " + de + ".");
+	public void lancerDe(Pirate pirate, int de) {
+		System.out.println(pirate.getIdentite().getNom() + " lance les des et fait " + de + ".");
 	}
 
-	public static void deplacement(Pirate pirate, int de, int nbCases) {
+	public void deplacement(Pirate pirate, int de, int nbCases) {
 		StringBuilder texte = new StringBuilder();
 		int nvNum = pirate.getPosition() + de;
 
@@ -59,20 +55,52 @@ public class Affichage {
 		else {
 			texte.append(" avance");
 		}
+		texte.append(". ");
 
-		System.out.printf(texte.toString());
+		System.out.print(texte.toString());
+	}
+	
+	public void descCase(Pirate pirate, Case caseActuelle) {
+		System.out.print(pirate.getIdentite().getPronom() + " tombe sur la case numero " + caseActuelle.getNumero());
 	}
 
-	public static void descCase(Case caseActuelle, Pirate pirate) {
+	// Utilisation du polymorphisme pour appeler differentes methodes en fonction de si la case est
+	// de type Case, CaseRhum, ou CaseArme
+	public void appliquerEffet(Case caseActuelle, Pirate pirate) {
 
-		System.out.print(
-				". " + pirate.getIdentite().getPronom() + " tombe sur la case numero " + caseActuelle.getNumero());
-
-		appliquerEffet(caseActuelle, pirate);
+		// Pas d'effet, il n'y a que la demande d'appuyer sur Entree
 		System.out.println("\n(Appuyer sur Entree)");
 		reader.nextLine();
 
 	}
+	
+	public void appliquerEffet(CaseRhum caseActuelle, Pirate pirate) {
+
+		System.out.println (" et trouve du rhum! " + pirate.getIdentite().getNom() + " boit.");
+		System.out.println("\n(Appuyer sur Entree)");
+		reader.nextLine();
+
+	}
+	
+	public void finEffetRhum() {
+		System.out.println(".");
+	}
+
+	
+	public void appliquerEffet(CaseArme caseActuelle, Pirate pirate) {
+
+		System.out.print(" et trouve une arme! C'est un " + caseActuelle.getArme().getNom() + " de force "
+				+ caseActuelle.getArme().getForce() + ".\n");
+		if (caseActuelle.getArme().getForce() > pirate.getArme().getForce()) {
+			System.out.print(pirate.getIdentite().getNom() + " l'a prend");
+		} else {
+			System.out.print(pirate.getIdentite().getNom() + " en a deja une meilleure");
+		}
+		System.out.println("\n(Appuyer sur Entree)");
+		reader.nextLine();
+
+	}
+	
 
 	private static String accorderCase(int de) {
 		String texte;
@@ -84,43 +112,25 @@ public class Affichage {
 		return texte;
 	}
 
-	private static void appliquerEffet(Case caseActuelle, Pirate pirate) {
-		StringBuilder texte = new StringBuilder();
-		if (caseActuelle.getEffet() == Effet.RHUM) {
-			texte.append(" et trouve du rhum! " + pirate.getIdentite().getNom() + " boit.\n");
-		}
 
-		else if (caseActuelle.getEffet() == Effet.ARME) {
-			texte.append(" et trouve une arme! C'est un " + caseActuelle.getArme().getNom() + " de force "
-					+ caseActuelle.getArme().getForce() + ".\n");
-			if (pirate.getArme() == null || caseActuelle.getArme().getForce() > pirate.getArme().getForce()) {
-				texte.append(pirate.getIdentite().getNom() + " l'a prend.\n");
-			} else {
-				texte.append(pirate.getIdentite().getNom() + " en a deja une meilleure.\n");
-			}
-		} else {
-			texte.append(".");
-		}
-		System.out.print(texte);
-	}
-
-	public static void debutDuel(Pirate pirateI, Pirate pirateJ, int deI, int deJ) {
+	public void debutDuel(Pirate pirateI, Pirate pirateJ, int deI, int deJ) {
 		System.out.println(
 				pirateI.getIdentite().getNom() + " et " + pirateJ.getIdentite().getNom() + " se battent en duel!");
 		System.out.println("(Pour lancer les dees appuyer sur Entree)");
 		reader.nextLine();
 
-		lancerDe(pirateI.getIdentite().getNom(), deI);
+		lancerDe(pirateI, deI);
 		System.out.println(pirateI.getIdentite().getPronom() + " donne un coup de force "
 				+ (deI + pirateI.getArme().getForce()) + "\n");
-		lancerDe(pirateJ.getIdentite().getNom(), deJ);
+		lancerDe(pirateJ, deJ);
 		System.out.println(pirateJ.getIdentite().getPronom() + " donne un coup de force "
 				+ (deJ + pirateJ.getArme().getForce()) + "\n");
 
 	}
 
-	public static void finDuel(String gagnant, Pirate perdant, int degat) {
-		System.out.print(gagnant + " gagne le duel et inflige " + degat);
+	public void finDuel(Pirate gagnant, Pirate perdant, int degat) {
+		
+		System.out.print(gagnant.getIdentite().getNom() + " gagne le duel et inflige " + degat);
 		if (degat == 1) {
 			System.out.print(" point ");
 		} else {
@@ -134,7 +144,7 @@ public class Affichage {
 		reader.nextLine();
 	}
 
-	public static void finDuelEgalite(Pirate pirateI, Pirate pirateJ) {
+	public void finDuelEgalite(Pirate pirateI, Pirate pirateJ) {
 		System.out.println("Egalite! " + pirateI.getIdentite().getNom() + " inflige 1 point de degat a "
 				+ pirateJ.getIdentite().getNom() + " et " + pirateJ.getIdentite().getNom()
 				+ " lui en inflige aussi 1.");
@@ -147,11 +157,11 @@ public class Affichage {
 	}
 	
 
-	public static void gagnantBarque(String nomPirate) {
-		System.out.println(nomPirate + " touve la barge! " + nomPirate + " est le nouveau capitaine!");
+	public void gagnantBarque(Pirate pirate) {
+		System.out.println(pirate.getIdentite().getNom() + " touve la barge! " + pirate.getIdentite().getNom() + " est le nouveau capitaine!");
 	}
 
-	public static void gagnantParDuel(Identite identite) {
+	public void gagnantParDuel(Identite identite) {
 		System.out.print(identite.getNom() + " est ");
 		if (identite.getPronom().equals("Elle")) {
 			System.out.print("la derniere");
@@ -161,11 +171,11 @@ public class Affichage {
 		System.out.println(" debout! " + identite.getNom() + " est le nouveau capitaine!");
 	}
 	
-	public static void tousMort() {
+	public void tousMort() {
 		System.out.println("Tout les pirates sont morts, le capitaine ne sera pas l'un d'entre eux!");
 	}
 	
-	private static void aPeri(Pirate pirate) {
+	public void aPeri(Pirate pirate) {
 		if (pirate.getPv() == 0) {
 			System.out.println(pirate.getIdentite().getNom() + " a peri!");
 		}
