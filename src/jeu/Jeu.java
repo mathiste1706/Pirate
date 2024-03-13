@@ -5,12 +5,13 @@ import java.util.Random;
 import personnages.Couleur;
 import personnages.Identite;
 import personnages.Pirate;
-import affichage.Affichage;
+import affichage.JournalDeBord;
 
 public class Jeu {
 	private int nbJoueurs=2;
 	private Pirate[] listePirates;
 	private Plateau plateau=new Plateau();
+	private JournalDeBord journal=new JournalDeBord();
 	private Random random=new Random();
 	
 	public Jeu(int nbJoueurs){
@@ -19,9 +20,6 @@ public class Jeu {
 	}
 	public Jeu() {
 		listePirates=new Pirate[nbJoueurs];
-	}
-	public int getnbJoueurs() {
-		return nbJoueurs;
 	}
 	
 	public Pirate[] getListePirates() {
@@ -35,27 +33,34 @@ public class Jeu {
 	public void start() {
 		boolean plusDeUnEnVie=true;
 		boolean arrivee=false;
+		int indexReac;
 		
-		// Remplissage de listePirate
-		for (int i=0; i<nbJoueurs;i++) {
-			listePirates[i]=new Pirate(Identite.values()[i], Couleur.values()[i]);
-		}
+		listePirates=remplissageListePirate();
 		
-		Affichage.contexte(listePirates);
+		
+		journal.contexte(listePirates);
 		
 		while (plusDeUnEnVie && !arrivee) {
 			
 			for (int i=0; i<listePirates.length && (!arrivee && plusDeUnEnVie);i++) {
+				
+				Pirate[] listeReac=new Pirate[nbJoueurs-1];
+				
 				// Tour d'un pirate
-					tour1Pirate(listePirates[i]);;
+					tour1Pirate(listePirates[i]);
 					
-					if (plateau.getListeCases()[listePirates[i].getPosition()-1].getEffet()==Effet.VICTOIRE) {
+					if (listePirates[i].getPosition()==plateau.getNbCases()) {
 						arrivee=true;
-						Affichage.gagnantBarque(listePirates[i].getIdentite().getNom());
+						journal.gagnantBarque(listePirates[i]);
 					}
 					else {
 						// Duel (les pirates se trouvent a une distance de 3 cases)
-						plusDeUnEnVie=duel(listePirates[i]);
+						
+						indexReac=checkDuel(listePirates[i], listeReac);
+			
+						if (indexReac!=-1) {		// S'il y a au moins un pirate a une distance de 3 cases
+							plusDeUnEnVie=duel(listePirates[i], listeReac, indexReac);
+						}
 					}
 				}
 			if (!plusDeUnEnVie) {
@@ -65,101 +70,53 @@ public class Jeu {
 			}
 	}
 	
-	private int lanceDe() {
-		int de=random.nextInt(6)+1;
-		de+=random.nextInt(6)+1;
-		return de;
+	private Pirate[] remplissageListePirate() {
+		
+		for (int i=0; i<nbJoueurs;i++) {
+			listePirates[i]=new Pirate(Identite.values()[i], Couleur.values()[i]);
+		}
+		return listePirates;
+		
 	}
 	
-	private void deplacerPirate(Pirate pirate, int valeurDe) {
-		int nvNum;
-		if (valeurDe<0) {
-			nvNum=pirate.getPosition()-Math.abs(valeurDe);
-			// Recule plus loin que la case Depart
-			 if (nvNum<1) {
-				nvNum=1;
-			}
-		}
-		else {
-			nvNum= pirate.getPosition()+valeurDe;
-			// Depasse la case arrivee
-			if (nvNum>plateau.getNbCases()) {
-				nvNum=plateau.getNbCases()-(nvNum-plateau.getNbCases());
-			}
-		}
-		
-		
-
-		pirate.setPosition(nvNum);
-	}
-	
-	private void appliquerEffet(Pirate pirate, Plateau plateau) {
-		int de;
-		Case caseActuelle=plateau.getListeCases()[pirate.getPosition()-1];
-		if (caseActuelle.getEffet()==Effet.RHUM) {
-			de=lanceDe();
-			Affichage.lancerDe(pirate.getIdentite().getNom(), de);
-			
-			de*=-1;		//Modification du signe pour reculer
-			Affichage.deplacement(pirate, de, plateau.getNbCases());
-			deplacerPirate(pirate, de);
-			caseActuelle=plateau.getListeCases()[pirate.getPosition()-1];
-			Affichage.descCase(caseActuelle, pirate);
-		}
-		else if (pirate.getArme()!=null &&caseActuelle.getEffet()==Effet.ARME && (caseActuelle.getArme().getForce()>pirate.getArme().getForce())){
-				pirate.setArme(caseActuelle.getArme());
-			
-		}
-	}
 	
 	private void tour1Pirate(Pirate pirate) {
 		
 		int de;
 	
 		if (pirate.getPv()>0) {
-			Affichage.aQuiTour(pirate);
+			journal.aQuiTour(pirate);
 			
-			de=lanceDe();
-			Affichage.lancerDe(pirate.getIdentite().getNom(), de);
+			de=De.lanceDe(random);
+			journal.lancerDe(pirate, de);
 			
-			Affichage.deplacement(pirate, de, plateau.getNbCases());
-			deplacerPirate(pirate,de);
-			Affichage.descCase(plateau.getListeCases()[pirate.getPosition()-1], pirate);
+			journal.deplacement(pirate, de, plateau.getNbCases());
 			
+			pirate.deplacerPirate(plateau.getNbCases(), de);
 			
-			appliquerEffet(pirate, plateau);
+			journal.descCase(pirate, plateau.getListeCases()[pirate.getPosition()-1]);
+			plateau.getListeCases()[pirate.getPosition()-1].appliquerEffet(pirate, plateau, random, journal);
 		}
 	}
 	
-	private int calculerDegat(int difference) {
-		int degat;
-		if (difference>=10) {
-			degat=3;
+	
+	
+	private int checkDuel(Pirate initiateur, Pirate[] listeReac) {
+		int indexReac=-1;
+		for (int j=0; j<listePirates.length;j++) {
+			if (!initiateur.equals(listePirates[j]) && listePirates[j].getPv()>0 && Math.abs(initiateur.getPosition()-listePirates[j].getPosition())<4) {
+				
+				indexReac++;	
+				listeReac[indexReac]=listePirates[j];
+						
+			}
 		}
-		else if (difference>=5) {
-			degat=2;
-		}
-		else {
-			degat=1;
-		}
-		return degat;
+		return indexReac;
+				
 	}
-	
-	private void infligerDegat(int difference, Pirate pirate) {
-		int nvPv;
-		
-		
-		nvPv=pirate.getPv()-calculerDegat(difference);
-		if (nvPv<0) {
-			nvPv=0;
-		}
-		pirate.setPv(nvPv);
-	}
-	
-	
 	
 	// Duel (les pirates se trouvent a une distance de 3 cases)
-	private boolean duel(Pirate initiateur) {
+	private boolean duel(Pirate initiateur, Pirate[] listeReac, int indexReac) {
 		boolean plusDeUnEnVie = false;
 		int deDuelInitiateur;
 		int deDuelReac;
@@ -167,48 +124,35 @@ public class Jeu {
 		int degatReac;
 		int enVie=0;
 		
-		int indexReac = 0;
-		Pirate reac=null;
-		Pirate[] listeReac=new Pirate[nbJoueurs];
+		Pirate reac=listeReac[random.nextInt(indexReac+1)];
 		
-		for (int j=0; j<listePirates.length;j++) {
-			if (!initiateur.equals(listePirates[j]) && listePirates[j].getPv()>0 && Math.abs(initiateur.getPosition()-listePirates[j].getPosition())<4) {
-			
-				listeReac[indexReac]=listePirates[j];
-				
-				indexReac++;
-			}
+		
+		deDuelInitiateur=De.lanceDe(random);
+		deDuelReac=De.lanceDe(random);
+		
+		degatInitiateur=deDuelInitiateur+initiateur.getArme().getForce();
+		degatReac=deDuelReac+reac.getArme().getForce();
+		
+		journal.debutDuel(initiateur, reac, deDuelInitiateur, deDuelReac);
+		
+		//Pirate reac perd
+		if (degatInitiateur>degatReac) {
+		
+			reac.infligerDegat(degatInitiateur-degatReac);
+			journal.finDuel(initiateur, reac, reac.calculerDegat(degatInitiateur-degatReac) );
 		}
-		reac=listeReac[random.nextInt(listeReac.length)];
-		
-		if (reac!=null) {
-			deDuelInitiateur=lanceDe();
-			deDuelReac=lanceDe();
+		// Pirate initiateur perd
+		else if (degatReac>degatInitiateur) {
 			
-			degatInitiateur=deDuelInitiateur+initiateur.getArme().getForce();
-			degatReac=deDuelReac+reac.getArme().getForce();
+			initiateur.infligerDegat(degatReac-degatInitiateur);
+			journal.finDuel(reac, initiateur, initiateur.calculerDegat(degatReac-degatInitiateur));
 			
-			Affichage.debutDuel(initiateur, reac, deDuelInitiateur, deDuelReac);
-			
-			//Pirate reac perd
-			if (degatInitiateur>degatReac) {
-			
-				infligerDegat(degatInitiateur-degatReac, reac);
-				Affichage.finDuel(initiateur.getIdentite().getNom(), reac, calculerDegat(degatInitiateur-degatReac));
-			}
-			// Pirate initiateur perd
-			else if (degatReac>degatInitiateur) {
-				
-				infligerDegat(degatReac-degatInitiateur, initiateur);
-				Affichage.finDuel(reac.getIdentite().getNom(), initiateur, calculerDegat(degatReac-degatInitiateur));
-				
-			}
-			// Egalite
-			else {
-				infligerDegat(0, initiateur);
-				infligerDegat(0, reac);
-				Affichage.finDuelEgalite(initiateur, reac);
-				}
+		}
+		// Egalite
+		else {
+			initiateur.infligerDegat(0);
+			reac.infligerDegat(0);
+			journal.finDuelEgalite(initiateur, reac);
 			}
 		
 				
@@ -227,12 +171,12 @@ public class Jeu {
 		boolean trouve=false;
 		for (int i=0;i<listePirates.length && !trouve;i++) {
 			if (listePirates[i].getPv()>0) {
-				Affichage.gagnantParDuel(listePirates[i].getIdentite());
+				journal.gagnantParDuel(listePirates[i].getIdentite());
 				trouve=true;
 			}
 		}
 		if (!trouve) {
-			Affichage.tousMort();
+			journal.tousMort();
 		}
 	}
 }

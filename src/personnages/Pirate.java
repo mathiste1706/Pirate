@@ -13,6 +13,7 @@ public class Pirate {
 		this.couleur=couleur;
 	}
 	
+
 	public int getPv() {
 		return pv;
 	}
@@ -40,8 +41,48 @@ public class Pirate {
 		this.arme=arme;
 	}
 	
-	public void setPosition(int position) {
-		this.position=position;
+	public void deplacerPirate(int nbCases, int valeurDe) {
+		int nvNum;
+		if (valeurDe<0) {
+			nvNum=getPosition()-Math.abs(valeurDe);
+			// Recule plus loin que la case Depart
+			 if (nvNum<1) {
+				nvNum=1;
+			}
+		}
+		else {
+			nvNum= position+valeurDe;
+			// Depasse la case arrivee
+			if (nvNum>nbCases) {
+				nvNum=nbCases-(nvNum-nbCases);
+			}
+		}
+		
+		position=nvNum;
 	}
 	
+	
+	public int calculerDegat(int difference) {
+		int degat;
+		if (difference>=10) {
+			degat=3;
+		}
+		else if (difference>=5) {
+			degat=2;
+		}
+		else {
+			degat=1;
+		}
+		return degat;
+	}
+	
+	public void infligerDegat(int difference) {
+		int nvPv;
+		
+		nvPv=pv-calculerDegat(difference);
+		if (nvPv<0) {
+			nvPv=0;
+		}
+		pv=nvPv;
+	}
 }
