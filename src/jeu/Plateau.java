@@ -15,15 +15,15 @@ public class Plateau {
 			}
 			
 			else if (i==11 || i==26) {
-				listeCases[i]=new CaseArme(new Arme("sabre", 2));
+				listeCases[i]=new CaseArme(Arme.SABRE);
 			}
 			
 			else if (i==7 || i==23) {
-				listeCases[i]=new CaseArme(new Arme("pistolet", 4));
+				listeCases[i]=new CaseArme(Arme.PISTOLET);
 			}
 			
 			else if (i==16) {
-				listeCases[i]=new CaseArme(new Arme("mousquet", 6));
+				listeCases[i]=new CaseArme(Arme.MOUSQUET);
 			}
 			else {
 				listeCases[i]=new Case();

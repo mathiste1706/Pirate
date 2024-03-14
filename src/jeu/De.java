@@ -9,7 +9,7 @@ public class De {
 		
 	}
 	
-	public static int lanceDe(Random random) {
+	protected static int lanceDe(Random random) {
 		int de=random.nextInt(6)+1;
 		de+=random.nextInt(6)+1;
 		return de;

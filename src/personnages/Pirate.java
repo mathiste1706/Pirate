@@ -5,7 +5,7 @@ public class Pirate {
 	private int pv=5;
 	private Identite identite;
 	private Couleur couleur;
-	private Arme arme=new Arme("Poigns",1);
+	private Arme arme=Arme.POINGS;
 	private int position=1;
 	
 	public Pirate(Identite identite, Couleur couleur) {
@@ -52,6 +52,7 @@ public class Pirate {
 		}
 		else {
 			nvNum= position+valeurDe;
+			
 			// Depasse la case arrivee
 			if (nvNum>nbCases) {
 				nvNum=nbCases-(nvNum-nbCases);

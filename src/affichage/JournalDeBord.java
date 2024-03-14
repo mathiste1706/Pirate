@@ -2,8 +2,6 @@ package affichage;
 
 import jeu.Case;
 import jeu.CaseArme;
-import jeu.CaseRhum;
-import personnages.Identite;
 import personnages.Pirate;
 
 import java.util.Scanner;
@@ -64,17 +62,17 @@ public class JournalDeBord implements IAffichage {
 		System.out.print(pirate.getIdentite().getPronom() + " tombe sur la case numero " + caseActuelle.getNumero());
 	}
 
-	// Utilisation du polymorphisme pour appeler differentes methodes en fonction de si la case est
-	// de type Case, CaseRhum, ou CaseArme
-	public void appliquerEffet(Case caseActuelle, Pirate pirate) {
+	
+	public void appliquerEffetNeutre(Pirate pirate) {
 
 		// Pas d'effet, il n'y a que la demande d'appuyer sur Entree
-		System.out.println("\n(Appuyer sur Entree)");
+		System.out.println(".");
+		System.out.print("\n(Appuyer sur Entree)");
 		reader.nextLine();
 
 	}
 	
-	public void appliquerEffet(CaseRhum caseActuelle, Pirate pirate) {
+	public void appliquerEffetRhum(Pirate pirate) {
 
 		System.out.println (" et trouve du rhum! " + pirate.getIdentite().getNom() + " boit.");
 		System.out.println("\n(Appuyer sur Entree)");
@@ -82,12 +80,7 @@ public class JournalDeBord implements IAffichage {
 
 	}
 	
-	public void finEffetRhum() {
-		System.out.println(".");
-	}
-
-	
-	public void appliquerEffet(CaseArme caseActuelle, Pirate pirate) {
+	public void appliquerEffetArme(CaseArme caseActuelle, Pirate pirate) {
 
 		System.out.print(" et trouve une arme! C'est un " + caseActuelle.getArme().getNom() + " de force "
 				+ caseActuelle.getArme().getForce() + ".\n");
@@ -101,16 +94,6 @@ public class JournalDeBord implements IAffichage {
 
 	}
 	
-
-	private static String accorderCase(int de) {
-		String texte;
-		if (Math.abs(de) == 1) {
-			texte = " case";
-		} else {
-			texte = " cases";
-		}
-		return texte;
-	}
 
 
 	public void debutDuel(Pirate pirateI, Pirate pirateJ, int deI, int deJ) {
@@ -161,14 +144,14 @@ public class JournalDeBord implements IAffichage {
 		System.out.println(pirate.getIdentite().getNom() + " touve la barge! " + pirate.getIdentite().getNom() + " est le nouveau capitaine!");
 	}
 
-	public void gagnantParDuel(Identite identite) {
-		System.out.print(identite.getNom() + " est ");
-		if (identite.getPronom().equals("Elle")) {
+	public void gagnantParDuel(Pirate pirate) {
+		System.out.print(pirate.getIdentite().getNom() + " est ");
+		if (pirate.getIdentite().getPronom().equals("Elle")) {
 			System.out.print("la derniere");
 		} else {
 			System.out.print("le dernier");
 		}
-		System.out.println(" debout! " + identite.getNom() + " est le nouveau capitaine!");
+		System.out.println(" debout! " + pirate.getIdentite().getNom() + " est le nouveau capitaine!");
 	}
 	
 	public void tousMort() {
@@ -179,6 +162,16 @@ public class JournalDeBord implements IAffichage {
 		if (pirate.getPv() == 0) {
 			System.out.println(pirate.getIdentite().getNom() + " a peri!");
 		}
+	}
+	
+	private static String accorderCase(int de) {
+		String texte;
+		if (Math.abs(de) == 1) {
+			texte = " case";
+		} else {
+			texte = " cases";
+		}
+		return texte;
 	}
 
 }

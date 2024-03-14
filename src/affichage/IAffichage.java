@@ -1,11 +1,8 @@
 package affichage;
 
-import java.util.Scanner;
 
 import jeu.Case;
 import jeu.CaseArme;
-import jeu.CaseRhum;
-import personnages.Identite;
 import personnages.Pirate;
 
 public interface IAffichage {
@@ -18,11 +15,13 @@ public interface IAffichage {
 
 	void deplacement(Pirate pirate, int de, int nbCases);
 	
-	void appliquerEffet(Case caseActuelle, Pirate pirate);
+	void descCase(Pirate pirate, Case caseActuelle);
 	
-	void appliquerEffet(CaseRhum caseActuelle, Pirate pirate);
+	void appliquerEffetNeutre(Pirate pirate);
 	
-	void appliquerEffet(CaseArme caseActuelle, Pirate pirate);
+	void appliquerEffetRhum(Pirate pirate);
+	
+	void appliquerEffetArme(CaseArme caseActuelle, Pirate pirate);
 
 	void debutDuel(Pirate pirateI, Pirate pirateJ, int deI, int deJ);
 
@@ -32,7 +31,7 @@ public interface IAffichage {
 	
 	void gagnantBarque(Pirate pirate);
 
-	void gagnantParDuel(Identite identite);
+	void gagnantParDuel(Pirate pirate);
 	
 	void tousMort();
 	 

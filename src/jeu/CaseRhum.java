@@ -15,7 +15,7 @@ public class CaseRhum extends CaseSpeciale {
 	protected void appliquerEffet(Pirate pirate, Plateau plateau, Random random, JournalDeBord journal) {
 		int de;
 		
-		journal.appliquerEffet(this, pirate);
+		journal.appliquerEffetRhum(pirate);
 		
 		de=De.lanceDe(random);
 		journal.lancerDe(pirate, de);
@@ -23,9 +23,10 @@ public class CaseRhum extends CaseSpeciale {
 		de*=-1;		//Modification du signe pour reculer
 		journal.deplacement(pirate, de, plateau.getNbCases());
 		pirate.deplacerPirate(plateau.getNbCases(), de);
-		journal.descCase(pirate, plateau.getListeCases()[pirate.getPosition()-1]);
-		journal.finEffetRhum();
 		
+		journal.descCase(pirate, plateau.getListeCases()[pirate.getPosition()-1]);
+		
+		plateau.getListeCases()[pirate.getPosition()-1].appliquerEffet(pirate, plateau, random, journal);
 
 	}
 

@@ -24,7 +24,7 @@ public class CaseArme extends CaseSpeciale {
 
 	@Override
 	protected void appliquerEffet(Pirate pirate, Plateau plateau, Random random, JournalDeBord journal) {
-		journal.appliquerEffet(this, pirate);
+		journal.appliquerEffetArme(this, pirate);
 		if (arme.getForce()>pirate.getArme().getForce()){
 			pirate.setArme(arme);
 		

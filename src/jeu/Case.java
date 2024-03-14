@@ -18,8 +18,9 @@ public class Case {
 		return numero;
 	}
 	
-	protected void appliquerEffet( Pirate pirate, Plateau plateau, Random random, JournalDeBord journal) {
-		journal.appliquerEffet(this, pirate);
+	
+	protected void appliquerEffet(Pirate pirate, Plateau plateau, Random random, JournalDeBord journal) {
+		journal.appliquerEffetNeutre(pirate);
 	}
 	
 }

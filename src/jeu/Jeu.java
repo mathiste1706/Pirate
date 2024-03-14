@@ -14,6 +14,10 @@ public class Jeu {
 	private JournalDeBord journal=new JournalDeBord();
 	private Random random=new Random();
 	
+	public int getNbJoueurs() {
+		return nbJoueurs;
+	}
+	
 	public Jeu(int nbJoueurs){
 		this.nbJoueurs=nbJoueurs;
 		listePirates=new Pirate[nbJoueurs];
@@ -103,12 +107,14 @@ public class Jeu {
 	
 	private int checkDuel(Pirate initiateur, Pirate[] listeReac) {
 		int indexReac=-1;
-		for (int j=0; j<listePirates.length;j++) {
-			if (!initiateur.equals(listePirates[j]) && listePirates[j].getPv()>0 && Math.abs(initiateur.getPosition()-listePirates[j].getPosition())<4) {
-				
-				indexReac++;	
-				listeReac[indexReac]=listePirates[j];
-						
+		if (initiateur.getPv()>0) {
+			for (int j=0; j<listePirates.length;j++) {
+				if (!initiateur.equals(listePirates[j]) && listePirates[j].getPv()>0 && Math.abs(initiateur.getPosition()-listePirates[j].getPosition())<4) {
+					
+					indexReac++;	
+					listeReac[indexReac]=listePirates[j];
+							
+				}
 			}
 		}
 		return indexReac;
@@ -171,7 +177,7 @@ public class Jeu {
 		boolean trouve=false;
 		for (int i=0;i<listePirates.length && !trouve;i++) {
 			if (listePirates[i].getPv()>0) {
-				journal.gagnantParDuel(listePirates[i].getIdentite());
+				journal.gagnantParDuel(listePirates[i]);
 				trouve=true;
 			}
 		}
