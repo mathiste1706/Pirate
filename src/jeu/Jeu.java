@@ -99,7 +99,12 @@ public class Jeu {
 			pirate.deplacerPirate(plateau.getNbCases(), de);
 			
 			journal.descCase(pirate, plateau.getListeCases()[pirate.getPosition()-1]);
-			plateau.getListeCases()[pirate.getPosition()-1].appliquerEffet(pirate, plateau, random, journal);
+			if (plateau.getListeCases()[pirate.getPosition()-1].isCaseSpeciale()) {
+				((CaseSpeciale) plateau.getListeCases()[pirate.getPosition()-1]).appliquerEffet(pirate, plateau, random, journal);
+			}
+			else {
+				journal.appuieSurEntree();
+			}
 		}
 	}
 	

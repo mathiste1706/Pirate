@@ -63,11 +63,9 @@ public class JournalDeBord implements IAffichage {
 	}
 
 	
-	public void appliquerEffetNeutre(Pirate pirate) {
+	public void appuieSurEntree() {
 
-		// Pas d'effet, il n'y a que la demande d'appuyer sur Entree
-		System.out.println(".");
-		System.out.print("\n(Appuyer sur Entree)");
+		System.out.println("\n(Appuyer sur Entree)");
 		reader.nextLine();
 
 	}
@@ -75,8 +73,7 @@ public class JournalDeBord implements IAffichage {
 	public void appliquerEffetRhum(Pirate pirate) {
 
 		System.out.println (" et trouve du rhum! " + pirate.getIdentite().getNom() + " boit.");
-		System.out.println("\n(Appuyer sur Entree)");
-		reader.nextLine();
+		appuieSurEntree();
 
 	}
 	
@@ -85,12 +82,11 @@ public class JournalDeBord implements IAffichage {
 		System.out.print(" et trouve une arme! C'est un " + caseActuelle.getArme().getNom() + " de force "
 				+ caseActuelle.getArme().getForce() + ".\n");
 		if (caseActuelle.getArme().getForce() > pirate.getArme().getForce()) {
-			System.out.print(pirate.getIdentite().getNom() + " l'a prend");
+			System.out.print(pirate.getIdentite().getNom() + " l'a prend.");
 		} else {
-			System.out.print(pirate.getIdentite().getNom() + " en a deja une meilleure");
+			System.out.print(pirate.getIdentite().getNom() + " en a deja une meilleure.");
 		}
-		System.out.println("\n(Appuyer sur Entree)");
-		reader.nextLine();
+		appuieSurEntree();
 
 	}
 	
@@ -119,24 +115,22 @@ public class JournalDeBord implements IAffichage {
 		} else {
 			System.out.print(" points ");
 		}
-		System.out.println("de degat a " + perdant.getIdentite().getNom());
+		System.out.print("de degat a " + perdant.getIdentite().getNom());
 
 		aPeri(perdant);
 
-		System.out.println("(Pour continuer taper sur Entree)");
-		reader.nextLine();
+		appuieSurEntree();
 	}
 
 	public void finDuelEgalite(Pirate pirateI, Pirate pirateJ) {
-		System.out.println("Egalite! " + pirateI.getIdentite().getNom() + " inflige 1 point de degat a "
+		System.out.print("Egalite! " + pirateI.getIdentite().getNom() + " inflige 1 point de degat a "
 				+ pirateJ.getIdentite().getNom() + " et " + pirateJ.getIdentite().getNom()
 				+ " lui en inflige aussi 1.");
 		
 		aPeri(pirateI);
 		aPeri(pirateJ);
 		
-		System.out.println("(Pour continuer taper sur Entree)");
-		reader.nextLine();
+		appuieSurEntree();
 	}
 	
 

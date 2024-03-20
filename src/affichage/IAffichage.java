@@ -17,8 +17,6 @@ public interface IAffichage {
 	
 	void descCase(Pirate pirate, Case caseActuelle);
 	
-	void appliquerEffetNeutre(Pirate pirate);
-	
 	void appliquerEffetRhum(Pirate pirate);
 	
 	void appliquerEffetArme(CaseArme caseActuelle, Pirate pirate);

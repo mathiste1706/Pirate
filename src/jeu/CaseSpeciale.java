@@ -1,5 +1,10 @@
 package jeu;
 
+import java.util.Random;
+
+import affichage.JournalDeBord;
+import personnages.Pirate;
+
 public abstract class CaseSpeciale extends Case {
 
 	private Effet effet;
@@ -12,5 +17,12 @@ public abstract class CaseSpeciale extends Case {
 	public Effet getEffet() {
 		return effet;
 	}
+	
+	protected abstract void appliquerEffet(Pirate pirate, Plateau plateau, Random random, JournalDeBord journal);
 
+	@Override
+	public boolean isCaseSpeciale() {
+		
+		return true;
+	}
 }

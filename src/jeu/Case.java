@@ -19,8 +19,9 @@ public class Case {
 	}
 	
 	
-	protected void appliquerEffet(Pirate pirate, Plateau plateau, Random random, JournalDeBord journal) {
-		journal.appliquerEffetNeutre(pirate);
+	public boolean isCaseSpeciale() {
+	
+		return false;
 	}
 	
 }

@@ -26,7 +26,6 @@ public class CaseRhum extends CaseSpeciale {
 		
 		journal.descCase(pirate, plateau.getListeCases()[pirate.getPosition()-1]);
 		
-		plateau.getListeCases()[pirate.getPosition()-1].appliquerEffet(pirate, plateau, random, journal);
 
 	}
 
