@@ -53,11 +53,9 @@ public class Jeu {
 				// Tour d'un pirate
 					tour1Pirate(listePirates[i]);
 					
-					if (listePirates[i].getPosition()==plateau.getNbCases()) {
-						arrivee=true;
-						journal.gagnantBarque(listePirates[i]);
-					}
-					else {
+					arrivee=gagnantBarque(listePirates[i]);
+					
+					if (!arrivee) {
 						// Duel (les pirates se trouvent a une distance de 3 cases)
 						
 						indexReac=checkDuel(listePirates[i], listeReac);
@@ -189,5 +187,14 @@ public class Jeu {
 		if (!trouve) {
 			journal.tousMort();
 		}
+	}
+	
+	private boolean gagnantBarque(Pirate pirate) {
+		boolean arrivee=false;
+		if (pirate.getPosition()==plateau.getNbCases()) {
+			journal.gagnantBarque(pirate);
+			arrivee=true;
+		}
+		return arrivee;
 	}
 }
