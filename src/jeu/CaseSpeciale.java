@@ -21,7 +21,7 @@ public abstract class CaseSpeciale extends Case {
 	protected abstract void appliquerEffet(Pirate pirate, Plateau plateau, Random random, JournalDeBord journal);
 
 	@Override
-	public boolean isCaseSpeciale() {
+	protected boolean isCaseSpeciale() {
 		
 		return true;
 	}

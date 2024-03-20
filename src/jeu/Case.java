@@ -1,9 +1,5 @@
 package jeu;
 
-import java.util.Random;
-
-import affichage.JournalDeBord;
-import personnages.Pirate;
 
 public class Case {
 	private static int compteur=0;
@@ -19,7 +15,7 @@ public class Case {
 	}
 	
 	
-	public boolean isCaseSpeciale() {
+	protected boolean isCaseSpeciale() {
 	
 		return false;
 	}

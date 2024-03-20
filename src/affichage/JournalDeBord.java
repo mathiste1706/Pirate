@@ -59,32 +59,32 @@ public class JournalDeBord implements IAffichage {
 	}
 	
 	public void descCase(Pirate pirate, Case caseActuelle) {
-		System.out.print(pirate.getIdentite().getPronom() + " tombe sur la case numero " + caseActuelle.getNumero());
+		System.out.println(pirate.getIdentite().getPronom() + " tombe sur la case numero " + caseActuelle.getNumero()+".");
 	}
 
 	
 	public void appuieSurEntree() {
 
-		System.out.println("\n(Appuyer sur Entree)");
+		System.out.println("(Appuyer sur Entree)");
 		reader.nextLine();
 
 	}
 	
 	public void appliquerEffetRhum(Pirate pirate) {
 
-		System.out.println (" et trouve du rhum! " + pirate.getIdentite().getNom() + " boit.");
+		System.out.println ("C'est une case Rhum! " + pirate.getIdentite().getNom() + " boit.");
 		appuieSurEntree();
 
 	}
 	
 	public void appliquerEffetArme(CaseArme caseActuelle, Pirate pirate) {
 
-		System.out.print(" et trouve une arme! C'est un " + caseActuelle.getArme().getNom() + " de force "
+		System.out.print("C'est une case Arme! " + pirate.getIdentite().getNom()+" y trouve un " + caseActuelle.getArme().getNom() + " de force "
 				+ caseActuelle.getArme().getForce() + ".\n");
 		if (caseActuelle.getArme().getForce() > pirate.getArme().getForce()) {
-			System.out.print(pirate.getIdentite().getNom() + " l'a prend.");
+			System.out.println(pirate.getIdentite().getNom() + " l'a prend.");
 		} else {
-			System.out.print(pirate.getIdentite().getNom() + " en a deja une meilleure.");
+			System.out.println(pirate.getIdentite().getNom() + " en a deja une meilleure.");
 		}
 		appuieSurEntree();
 
@@ -93,7 +93,7 @@ public class JournalDeBord implements IAffichage {
 
 
 	public void debutDuel(Pirate pirateI, Pirate pirateJ, int deI, int deJ) {
-		System.out.println(
+		System.out.println("\n"+
 				pirateI.getIdentite().getNom() + " et " + pirateJ.getIdentite().getNom() + " se battent en duel!");
 		System.out.println("(Pour lancer les dees appuyer sur Entree)");
 		reader.nextLine();
@@ -115,7 +115,7 @@ public class JournalDeBord implements IAffichage {
 		} else {
 			System.out.print(" points ");
 		}
-		System.out.print("de degat a " + perdant.getIdentite().getNom());
+		System.out.println("de degat a " + perdant.getIdentite().getNom()+".");
 
 		aPeri(perdant);
 
@@ -123,7 +123,7 @@ public class JournalDeBord implements IAffichage {
 	}
 
 	public void finDuelEgalite(Pirate pirateI, Pirate pirateJ) {
-		System.out.print("Egalite! " + pirateI.getIdentite().getNom() + " inflige 1 point de degat a "
+		System.out.println("Egalite! " + pirateI.getIdentite().getNom() + " inflige 1 point de degat a "
 				+ pirateJ.getIdentite().getNom() + " et " + pirateJ.getIdentite().getNom()
 				+ " lui en inflige aussi 1.");
 		
