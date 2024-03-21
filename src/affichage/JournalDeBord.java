@@ -158,7 +158,7 @@ public class JournalDeBord implements IAffichage {
 		}
 	}
 	
-	private static String accorderCase(int de) {
+	private String accorderCase(int de) {
 		String texte;
 		if (Math.abs(de) == 1) {
 			texte = " case";
