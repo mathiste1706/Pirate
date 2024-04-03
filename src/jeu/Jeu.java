@@ -148,7 +148,7 @@ public class Jeu {
 		if (degatInitiateur>degatReac) {
 		
 			reac.infligerDegat(degatInitiateur-degatReac);
-			journal.finDuel(initiateur, reac, reac.calculerDegat(degatInitiateur-degatReac) );
+			journal.finDuel(initiateur, reac, reac.calculerDegat(degatInitiateur-degatReac));
 		}
 		// Pirate initiateur perd
 		else if (degatReac>degatInitiateur) {
@@ -166,16 +166,18 @@ public class Jeu {
 		
 				
 		// Teste si plus de un pirate est en vie
-		for (int j=0; j<listePirates.length && enVie<3;j++)
+		for (int j=0; j<listePirates.length && enVie<3;j++) {
 			if (listePirates[j].getPv()>0) {
 				enVie++;
 			}
+		}
 		if (enVie>1) {
 			plusDeUnEnVie=true;
 		}
 		return plusDeUnEnVie;
 	}
 	
+	// Si trouve est true, il n'y a plus qu'un seul pirate en vie, sinon, tous les pirates sont morts
 	private void gagnantDuel() {
 		boolean trouve=false;
 		for (int i=0;i<listePirates.length && !trouve;i++) {

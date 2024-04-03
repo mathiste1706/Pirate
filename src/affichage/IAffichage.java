@@ -15,6 +15,8 @@ public interface IAffichage {
 
 	void deplacement(Pirate pirate, int de, int nbCases);
 	
+	void deplacementRhum(Pirate pirate);
+	
 	void descCase(Pirate pirate, Case caseActuelle);
 	
 	void appliquerEffetRhum(Pirate pirate);

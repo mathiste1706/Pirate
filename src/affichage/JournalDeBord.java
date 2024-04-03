@@ -58,6 +58,12 @@ public class JournalDeBord implements IAffichage {
 		System.out.print(texte.toString());
 	}
 	
+	public void deplacementRhum(Pirate pirate) {
+			System.out.print(pirate.getIdentite().getNom() + "recule. ");
+
+		
+	}
+	
 	public void descCase(Pirate pirate, Case caseActuelle) {
 		System.out.println(pirate.getIdentite().getPronom() + " tombe sur la case numero " + caseActuelle.getNumero()+".");
 	}
@@ -149,7 +155,7 @@ public class JournalDeBord implements IAffichage {
 	}
 	
 	public void tousMort() {
-		System.out.println("Tout les pirates sont morts, le capitaine ne sera pas l'un d'entre eux!");
+		System.out.println("Tous les pirates sont morts, le capitaine ne sera pas l'un d'entre eux!");
 	}
 	
 	public void aPeri(Pirate pirate) {

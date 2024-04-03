@@ -42,25 +42,28 @@ public class Pirate {
 	}
 	
 	public void deplacerPirate(int nbCases, int valeurDe) {
+		
 		int nvNum;
-		if (valeurDe<0) {
-			nvNum=getPosition()-Math.abs(valeurDe);
-			// Recule plus loin que la case Depart
-			 if (nvNum<1) {
-				nvNum=1;
-			}
-		}
-		else {
-			nvNum= position+valeurDe;
 			
-			// Depasse la case arrivee
-			if (nvNum>nbCases) {
-				nvNum=nbCases-(nvNum-nbCases);
-			}
+		nvNum= position+valeurDe;
+			
+		// Depasse la case arrivee
+		if (nvNum>nbCases) {
+			nvNum=nbCases-(nvNum-nbCases);
 		}
 		
 		position=nvNum;
 	}
+	
+	public void reculerPirate(int valeurDe) {
+		int nvNum;
+		nvNum=getPosition()-valeurDe;
+		// Recule plus loin que la case Depart
+		 if (nvNum<1) {
+			nvNum=1;
+			}
+		 position=nvNum;
+		}
 	
 	
 	public int calculerDegat(int difference) {

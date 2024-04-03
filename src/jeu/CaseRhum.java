@@ -20,9 +20,8 @@ public class CaseRhum extends CaseSpeciale {
 		de=De.lanceDe(random);
 		journal.lancerDe(pirate, de);
 		
-		de*=-1;		//Modification du signe pour reculer
-		journal.deplacement(pirate, de, plateau.getNbCases());
-		pirate.deplacerPirate(plateau.getNbCases(), de);
+		journal.deplacementRhum(pirate);
+		pirate.reculerPirate(de);
 		
 		journal.descCase(pirate, plateau.getListeCases()[pirate.getPosition()-1]);
 		
